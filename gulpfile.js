@@ -43,7 +43,7 @@ gulp.task('run', ['serve'], function(){
 // Lint / TBD
 // ***************************************
 gulp.task('lint', function(){
-	return gulp.src('src/js/*.js').pipe(eslint()).pipe(eslint.format());
+	return gulp.src(paths.src + '/js/*.js').pipe(eslint()).pipe(eslint.format());
 });
 
 
@@ -51,7 +51,7 @@ gulp.task('lint', function(){
 // Tests / TBD
 // ***************************************
 gulp.task('tests', function(){
-	gulp.src('src/js/*.js')
+	gulp.src(paths.src + '/js/*.js')
 		.pipe(jasmine({
 			integration: true,
 			vendor: 'js/**/*.js'
@@ -67,7 +67,7 @@ gulp.task('tests', function(){
 // Merge all scripts into one script
 // ***************************************
 gulp.task('concatScripts', function() {
-	return gulp.src('src/js/*.js')
+	return gulp.src(paths.src + '/js/*.js')
 	// Initialize source maps for Javascript
 	.pipe(sourcemaps.init())
 	// Name and location of the compiled file
@@ -83,7 +83,7 @@ gulp.task('concatScripts', function() {
 // Here we're using gulp uglify to minify script + gulp rename which is used to rename the file
 // ***************************************
 gulp.task('minifyScripts', ['concatScripts'], function(){
-  return gulp.src('src/js/*.js')
+  return gulp.src(paths.src + '/js/*.js')
     .pipe(uglify().on('error', gutil.log.bind(gutil, gutil.colors.red(
          '\n\n*********************************** \n' +
         'JS ERROR:' +
@@ -125,7 +125,7 @@ gulp.task('compileSass', function() {
 // Minify and inline HTML compiled file
 // ***************************************
 gulp.task('compressHtml', function() {
-	return gulp.src('src/*.html')
+	return gulp.src(paths.src + '/*.html')
 	.pipe(minifyInline())
 	.pipe(minifyHTML())
 	.pipe(gulp.dest('public/'))
@@ -137,10 +137,10 @@ gulp.task('compressHtml', function() {
 // Watch method for live coding and live compiling of Scss and Javascript
 // ***************************************
 gulp.task('watchFiles', function(){
-	gulp.watch(paths.src + '/src/scss/*.scss', ['compileSass']);
-	gulp.watch('src/js/**', ['concatScripts']);
-	gulp.watch(['src/*.html'], ['compressHtml']);
-	gulp.watch(['src/js/**'], ['eslint']);
+	gulp.watch(paths.src + '/scss/*.scss', ['compileSass']);
+	gulp.watch(paths.src + '/js/**', ['concatScripts']);
+	gulp.watch(paths.src + '/*.html', ['compressHtml']);
+	gulp.watch(paths.src + '/js/**', ['eslint']);
 })
 
 
@@ -148,7 +148,7 @@ gulp.task('watchFiles', function(){
 // Lossless image optimizer
 // ***************************************
 gulp.task('imgOptimize', function(){
-	return gulp.src('src/img/*')
+	return gulp.src(paths.src + '/img/*')
 		.pipe(imagemin({
 			progressive: true,
 			svgoPlugins: [{removeViewBox: false}],
@@ -179,7 +179,7 @@ gulp.task('serve', ['watchFiles']);
 // This build task will compile all files into new /public folder. {base: means that the files will keep their starting directory, e.g. styles/main.css will be in styles folder}
 // ***************************************
 gulp.task("build", ['html'], function() {
-	return gulp.src([paths.src + '/js/*.js', paths.src + '/index.html', paths.src + "/img/**", paths.src + "/fonts/**"], { base: paths.src})
+	return gulp.src([paths.src + '/css/*.css', paths.src + '/js/*.js', paths.src + '/*.html', paths.src + "/img/**", paths.src + "/fonts/**"], { base: paths.src})
 			   .pipe(gulp.dest(paths.public));
 });
 
@@ -190,9 +190,9 @@ gulp.task("build", ['html'], function() {
 // ***************************************
 gulp.task('html', ['compileSass', 'minifyScripts', 'compressHtml'], function() {
 	gulp.src(paths.src + '/index.html')
-		.pipe(iff('*.js', uglify()))
+		.pipe(iff(paths.src + '/js/*.js', uglify()))
 		// gulp-csso is being used for CSS optimization
-		.pipe(iff('*.css', csso()))
+		.pipe(iff(paths.src + '/css/*.css', csso()))
 		.pipe(useref())
 		.pipe(gulp.dest(paths.public));
 });
