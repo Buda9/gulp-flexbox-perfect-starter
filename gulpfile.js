@@ -145,6 +145,7 @@ gulp.task('watchFiles', function(){
 
 
 // ***************************************
+// command $ gulp imgOptimize
 // Lossless image optimizer
 // ***************************************
 gulp.task('imgOptimize', function(){
