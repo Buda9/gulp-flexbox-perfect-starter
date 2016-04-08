@@ -31,7 +31,7 @@ var reload      = browserSync.reload;
 // ***************************************
 // Browser-Sync Tasks
 // ***************************************
-gulp.task('run', ['watchFiles'], function(){
+gulp.task('run', ['serve'], function(){
 	browserSync.init({
 		server: 'public/'
 	});
@@ -55,7 +55,11 @@ gulp.task('tests', function(){
 		.pipe(jasmine({
 			integration: true,
 			vendor: 'js/**/*.js'
-		}));
+		})).on('error', gutil.log.bind(gutil, gutil.colors.red(
+         '\n\n*********************************** \n' +
+        'JS ERROR:' +
+        '\n*********************************** \n\n'
+        )));
 });
 
 
@@ -70,7 +74,7 @@ gulp.task('concatScripts', function() {
 	.pipe(concat('app.js'))
 	// Path for maps. This in brackets (./) means it will stay in same location
 	// If you wish to add maps in one directory up we can use this: '../maps'
-	.pipe(sourcemaps.write('./'))
+	.pipe(sourcemaps.write('./maps'))
 	.pipe(gulp.dest('public/js'))
 });
 
@@ -82,7 +86,7 @@ gulp.task('minifyScripts', ['concatScripts'], function(){
   return gulp.src('src/js/*.js')
     .pipe(uglify().on('error', gutil.log.bind(gutil, gutil.colors.red(
          '\n\n*********************************** \n' +
-        'SASS ERROR:' +
+        'JS ERROR:' +
         '\n*********************************** \n\n'
         ))))
     .pipe(rename({
@@ -112,7 +116,7 @@ gulp.task('compileSass', function() {
 		// When this-> ('./') is used it means that we want to insert css.map in the same folder as compiled CSS
 		.pipe(sourcemaps.write('./maps'))
 		// Directory of compiled Sass
-		.pipe(gulp.dest(paths.src + '/../public/css'))
+		.pipe(gulp.dest(paths.public + '/../public/css'))
 		.pipe(browserSync.reload({stream:true}));
 });
 
@@ -133,10 +137,25 @@ gulp.task('compressHtml', function() {
 // Watch method for live coding and live compiling of Scss and Javascript
 // ***************************************
 gulp.task('watchFiles', function(){
-	gulp.watch(paths.src + '/src/scss/**/*.scss', ['compileSass']);
+	gulp.watch(paths.src + '/src/scss/*.scss', ['compileSass']);
 	gulp.watch('src/js/**', ['concatScripts']);
+	gulp.watch(['src/*.html'], ['compressHtml']);
 	gulp.watch(['src/js/**'], ['eslint']);
 })
+
+
+// ***************************************
+// Lossless image optimizer
+// ***************************************
+gulp.task('imgOptimize', function(){
+	return gulp.src('src/img/*')
+		.pipe(imagemin({
+			progressive: true,
+			svgoPlugins: [{removeViewBox: false}],
+			use: [pngquant()]
+		}))
+		.pipe(gulp.dest('public/img'));
+});
 
 
 // ***************************************
@@ -160,8 +179,8 @@ gulp.task('serve', ['watchFiles']);
 // This build task will compile all files into new /public folder. {base: means that the files will keep their starting directory, e.g. styles/main.css will be in styles folder}
 // ***************************************
 gulp.task("build", ['html'], function() {
-  return gulp.src([paths.src + '/js/*.js', paths.src + '/index.html', paths.src + "/img/**", paths.src + "/fonts/**"], { base: paths.src})
-            .pipe(gulp.dest(paths.public));
+	return gulp.src([paths.src + '/js/*.js', paths.src + '/index.html', paths.src + "/img/**", paths.src + "/fonts/**"], { base: paths.src})
+			   .pipe(gulp.dest(paths.public));
 });
 
 
@@ -180,24 +199,11 @@ gulp.task('html', ['compileSass', 'minifyScripts', 'compressHtml'], function() {
 
 
 // ***************************************
-// Lossless image optimizer
-// ***************************************
-gulp.task('optimize', function(){
-	return gulp.src('src/img/*')
-		.pipe(imagemin({
-			progressive: true,
-			svgoPlugins: [{removeViewBox: false}],
-			use: [pngquant()]
-		}))
-		.pipe(gulp.dest('public/img'));
-});
-
-
-// ***************************************
 // command $ gulp
 // It will call clean task that will remove previously compiled files before creating new ones
 // ***************************************
-gulp.task('default', ['clean'], function(){
-	// Warning! gulp.series will replace gulp.start in gulp v4
+gulp.task('default', ['clean', 'imgOptimize'], function(){
+	// Warning! gulp.start will be replace with gulp.series in gulp v4
 	gulp.start('build');
+	gulp.start('run');
 })
