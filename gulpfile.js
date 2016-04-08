@@ -28,6 +28,9 @@ var browserSync = require('browser-sync').create();
 var reload      = browserSync.reload;
 
 
+// ***************************************
+// Browser-Sync Tasks
+// ***************************************
 gulp.task('run', ['watchFiles'], function(){
 	browserSync.init({
 		server: 'public/'
@@ -35,12 +38,18 @@ gulp.task('run', ['watchFiles'], function(){
 	browserSync.stream();
 });
 
-// Lint script
+
+// ***************************************
+// Lint / TBD
+// ***************************************
 gulp.task('lint', function(){
 	return gulp.src('src/js/*.js').pipe(eslint()).pipe(eslint.format());
 });
 
-// 
+
+// ***************************************
+// Tests / TBD
+// ***************************************
 gulp.task('tests', function(){
 	gulp.src('src/js/*.js')
 		.pipe(jasmine({
@@ -49,7 +58,10 @@ gulp.task('tests', function(){
 		}));
 });
 
+
+// ***************************************
 // Merge all scripts into one script
+// ***************************************
 gulp.task('concatScripts', function() {
 	return gulp.src('src/js/*.js')
 	// Initialize source maps for Javascript
@@ -62,33 +74,52 @@ gulp.task('concatScripts', function() {
 	.pipe(gulp.dest('public/js'))
 });
 
+
+// ***************************************
 // Here we're using gulp uglify to minify script + gulp rename which is used to rename the file
+// ***************************************
 gulp.task('minifyScripts', ['concatScripts'], function(){
   return gulp.src('src/js/*.js')
-    .pipe(uglify().on('error', gutil.log))
+    .pipe(uglify().on('error', gutil.log.bind(gutil, gutil.colors.red(
+         '\n\n*********************************** \n' +
+        'SASS ERROR:' +
+        '\n*********************************** \n\n'
+        ))))
     .pipe(rename({
       suffix: '.min'
     }))
     .pipe(gulp.dest('./public/js'));
 });
 
+
+// ***************************************
 // Gulp Sass package + gulp autoprefixer package + gulp Sass sourcemaps package
+// ***************************************
 gulp.task('compileSass', function() {
   return gulp.src(paths.src + "/scss/style.scss")
 		// Initialize css.map
 		.pipe(sourcemaps.init())
 		// Initialize Sass
-		.pipe(sass({outputStyle: 'compressed'}).on('error', gutil.log))
+		.pipe(sass({outputStyle: 'compressed'}).on('error', gutil.log.bind(gutil, gutil.colors.red(
+         '\n\n*********************************** \n' +
+        'SASS ERROR:' +
+        '\n*********************************** \n\n'
+        ))))
 		// Initialize autoprefixer
 		.pipe(autoprefixer({
 			browsers: ['last 4 versions']
 		}))
-		// When this in brackets is used ('./') means that we want to insert css.map in the same folder as compiled CSS
-		.pipe(sourcemaps.write('./'))
+		// When this-> ('./') is used it means that we want to insert css.map in the same folder as compiled CSS
+		.pipe(sourcemaps.write('./maps'))
 		// Directory of compiled Sass
-		.pipe(gulp.dest(paths.src + '/../public/css'));
+		.pipe(gulp.dest(paths.src + '/../public/css'))
+		.pipe(browserSync.reload({stream:true}));
 });
 
+
+// ***************************************
+// Minify and inline HTML compiled file
+// ***************************************
 gulp.task('compressHtml', function() {
 	return gulp.src('src/*.html')
 	.pipe(minifyInline())
@@ -97,32 +128,47 @@ gulp.task('compressHtml', function() {
 	.pipe(reload({stream:true}));
 });
 
+
+// ***************************************
 // Watch method for live coding and live compiling of Scss and Javascript
+// ***************************************
 gulp.task('watchFiles', function(){
 	gulp.watch(paths.src + '/src/scss/**/*.scss', ['compileSass']);
 	gulp.watch('src/js/**', ['concatScripts']);
 	gulp.watch(['src/js/**'], ['eslint']);
 })
 
+
+// ***************************************
 // command $ gulp clean
 // Use if you wish to manually remove compiled files and folders
+// ***************************************
 gulp.task('clean', function() {
-  del('public');
+  del(['public/css','public/js']);
 });
 
+
+// ***************************************
 // command $ gulp serve
 // When this command is used it will automatically compile Scss and Javascript files
+// ***************************************
 gulp.task('serve', ['watchFiles']);
 
+
+// ***************************************
 // command $ gulp build
 // This build task will compile all files into new /public folder. {base: means that the files will keep their starting directory, e.g. styles/main.css will be in styles folder}
+// ***************************************
 gulp.task("build", ['html'], function() {
   return gulp.src([paths.src + '/js/*.js', paths.src + '/index.html', paths.src + "/img/**", paths.src + "/fonts/**"], { base: paths.src})
             .pipe(gulp.dest(paths.public));
 });
 
+
+// ***************************************
 // command $ gulp html
 // Gulp-useref concatenates any number of CSS and JavaScript files into a single file by looking for a comment that starts with "<!--build:" and ends with "<!--endbuild-->", located in HTML file
+// ***************************************
 gulp.task('html', ['compileSass', 'minifyScripts', 'compressHtml'], function() {
 	gulp.src(paths.src + '/index.html')
 		.pipe(iff('*.js', uglify()))
@@ -132,19 +178,25 @@ gulp.task('html', ['compileSass', 'minifyScripts', 'compressHtml'], function() {
 		.pipe(gulp.dest(paths.public));
 });
 
+
+// ***************************************
 // Lossless image optimizer
+// ***************************************
 gulp.task('optimize', function(){
-	return gulp.src('src/images/*')
+	return gulp.src('src/img/*')
 		.pipe(imagemin({
 			progressive: true,
 			svgoPlugins: [{removeViewBox: false}],
 			use: [pngquant()]
 		}))
-		.pipe(gulp.dest('public/images'));
+		.pipe(gulp.dest('public/img'));
 });
 
+
+// ***************************************
 // command $ gulp
 // It will call clean task that will remove previously compiled files before creating new ones
+// ***************************************
 gulp.task('default', ['clean'], function(){
 	// Warning! gulp.series will replace gulp.start in gulp v4
 	gulp.start('build');
