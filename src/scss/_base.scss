@@ -1,0 +1,36 @@
+/*******************
+ * BASE
+*******************/
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+html {
+    overflow-y: scroll;
+}
+
+body{
+	color: $body-text;
+	margin: 0;
+	padding: 0;
+	background: #333;
+	font-weight: $font-weight-body;
+	font-family: $font-family-primary;
+
+    // media query mixin, see _mixins.scss
+    @include desktop {
+        background: $grey-light;;
+    }
+}
+
+hr {
+    border: solid #DDDDDD;
+    border-width: 1px 0 0;
+    clear: both;
+    height: 0;
+    margin: 40px 0;
+}

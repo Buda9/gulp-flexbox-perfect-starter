@@ -1,0 +1,17 @@
+/*******************
+ * CODE
+*******************/
+code, kbd, pre, samp {
+    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+    font-size: $font-size-code;
+}
+
+code{
+	background: $grey-light;
+	padding: 2px;
+}
+
+pre{
+	background: $grey-light;
+	padding: 20px;
+}

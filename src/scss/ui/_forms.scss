@@ -1,0 +1,86 @@
+/*******************
+ * FORMS
+*******************/
+input,
+select,
+textarea {
+    font-size: 100%; /* Corrects font size not being inherited in all browsers */
+    margin: 0; /* Addresses margins set differently in IE6/7, F3/4, S5, Chrome */
+    vertical-align: baseline; /* Improves appearance and consistency in all browsers */
+}
+
+
+input[type="text"],input[type="password"],input[type="date"],input[type="email"],input[type="search"],input[type="url"],select,textarea {
+    width: 100%;
+    max-width: 100%;
+
+    &:focus {
+        border-color: #66afe9;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    }
+}
+
+input[type="range"] {
+    width: 100%;
+    max-width: 100%;
+}
+
+
+textarea {
+    overflow: auto; /* Removes default vertical scrollbar in IE6/7/8/9 */
+    padding-left: 3px;
+    vertical-align: top; /* Improves readability and alignment in all browsers */
+}
+
+label{
+	color: $body-text;
+    padding-right: 10px;
+}
+
+input, textarea {
+    border: 1px solid #DDDDDD;
+    color: #7F7F7F;
+    font-family: sans-serif;
+    font-size: 14px;
+    line-height: 1;
+    margin: 2px 6px 12px 0;
+    padding: 8px;
+    
+}
+
+select {
+    border: 1px solid #DDDDDD;
+    color: #7F7F7F;
+    font-size: 14px;
+    margin-bottom: 20px;
+    padding: 5px;
+    border-radius:5px;
+}
+
+input[type="color"]{
+	border: none;
+	background: none;
+	padding: 0;	
+}
+
+
+input[type="checkbox"],
+input[type="radio"] {
+    padding: 0; /* Addresses excess padding in IE8/9 */
+}
+input[type="search"] {
+    -webkit-appearance: textfield; /* Addresses appearance set to searchfield in S5, Chrome */
+    -webkit-box-sizing: content-box; /* Addresses box sizing set to border-box in S5, Chrome (include -moz to future-proof) */
+    -moz-box-sizing:    content-box;
+    box-sizing:         content-box;
+}
+input[type="search"]::-webkit-search-decoration { /* Corrects inner padding displayed oddly in S5, Chrome on OSX */
+    -webkit-appearance: none;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner { /* Corrects inner padding and border displayed oddly in FF3/4 www.sitepen.com/blog/2008/05/14/the-devils-in-the-details-fixing-dojos-toolbar-buttons/ */
+    border: 0;
+    padding: 0;
+}

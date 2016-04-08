@@ -1,0 +1,47 @@
+/*******************
+ * VARIABLES
+*******************/
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic');
+//font-family: 'Roboto', sans-serif;
+
+//LAYOUT
+$desktop: 768px;
+
+// TYPOGRAPHY
+$font-family-title: 'Roboto', sans-serif; 
+$font-family-primary: 'Roboto', sans-serif;  // "Helvetica Neue", Helvetica, Arial, sans-serif
+$body-text: #333333;
+$font-weight-title: 400;
+$font-weight-body: 300;
+
+$font-size: 100%;
+$font-size-mobile: 100%;
+$font-size-code: 90%;
+
+$line-height: 1.625;
+$line-height-mobile: 1.625;
+
+// COLORS
+$color1: #5bc0de;  // blue
+$color2: #9CBE26;  // green
+
+$success: #5cb85c; // green
+$info: #5bc0de; // blue
+$warning: #f0ad4e; // orange
+$danger: #d9534f; //red
+
+$white: #fff;
+$black: #3a3a3a;
+$grey: #ccc;
+$grey-light: lighten( $grey, 16% );
+$grey-dark: darken( $grey, 20% );
+
+// COLORS: Links
+$link_color: $color1;
+$link_hover: darken( $color1, 20% );
+
+// COLORS: Buttons
+$button-color: $color1;
+$button-color-hover: darken( $button-color, 10% );
+$button-color-disabled: $button-color;

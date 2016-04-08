@@ -1,0 +1,52 @@
+/*******************
+ * TABLES
+*******************/
+table {
+    width: 100%;
+    max-width: 100%;
+    text-align: left;
+
+    td, th {
+	    border: 1px solid #ddd;
+	    padding: 7px 20px;
+	}
+	th{
+	background: darken( $grey-light, 3% );
+	}
+
+	td{
+		font-size: .9em;
+
+		&:hover{
+			background: darken( $grey-light, 3% );
+			@include transition-all(.3s);
+		}
+	}
+
+}
+
+table.table-striped{
+	tr{
+		&:nth-child(even) {
+			background: $grey-light;
+		}
+	}
+}
+
+.table-responsive {
+    min-height: .01%;
+    overflow-x: auto;
+
+    td{
+    	white-space: nowrap;
+    }
+}
+
+
+
+
+
+
+
+
+

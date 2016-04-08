@@ -1,0 +1,109 @@
+/*******************
+ * BUTTONS
+*******************/
+
+button {
+    font-size: 100%; /* Corrects font size not being inherited in all browsers */
+    margin: 0; /* Addresses margins set differently in IE6/7, F3/4, S5, Chrome */
+    vertical-align: baseline; /* Improves appearance and consistency in all browsers */
+}
+
+.button, button, input[type="submit"], input[type="button"], input[type="reset"] {
+    display: inline-block;
+    position: relative;
+    padding: 8px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: normal;
+    border: 0 none;
+    margin-top: 0 5px;
+	font-size: 14px;
+	@include fade;
+    font-weight: $font-weight-body;
+    font-family: $font-family-title;
+    text-transform: capitalize;
+}
+
+.button, button, button a, input[type="submit"], input[type="button"], input[type="reset"]{
+	background: $button-color;
+	color: #fff !important;
+
+	&:hover{
+		background: $button-color-hover;
+	}
+}
+
+input[type="submit"]{
+    padding-top: 9px;
+    padding-bottom: 9px;
+}
+
+input[type=submit][disabled=disabled], button[disabled=disabled], a.disabled, .button.disabled, button.disabled {
+    background: $button-color-disabled;
+    color: $white !important;
+    opacity:0.6;
+    cursor: default;
+    pointer-events: none;
+}
+
+.img-button{
+    border: none;
+    padding: 0;
+    vertical-align: bottom;
+}
+input.button {
+    padding: 10px !important;
+}
+// colors here
+
+.button, button, input[type="submit"]{
+	background: $button-color;
+	color: #fff !important;
+}
+
+.button.expanded{
+    width: 100%;
+    max-width: 100%;
+}
+
+ul.button-group{
+        padding-left: 0;
+    li{
+        list-style: none;
+        display: table-cell;
+        a{
+            border-left: 1px solid;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+       
+    }
+}
+
+.button.info, button.info{
+    padding-bottom: 8px;
+}
+
+.success{
+    background: $success;
+    &:hover{
+        background: darken( $success, 15% );
+    }
+}
+.info{
+    background: $info;
+     &:hover{
+        background: darken( $info, 15% );
+    }
+}
+.warning{
+    background: $warning;
+     &:hover{
+        background: darken( $warning, 15% );
+    }
+}
+.danger{
+    background: $danger;
+     &:hover{
+        background: darken( $danger, 15% );
+    }
+}

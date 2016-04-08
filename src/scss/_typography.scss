@@ -1,0 +1,38 @@
+/*******************
+ * LINKS
+*******************/
+a, a:visited {
+	text-decoration:none;
+	color:$link_color;
+	@include transition-all(.5s);
+}
+a:hover, a:active, a:focus {
+	color:$link_hover;
+	@include transition-all(.5s);
+}
+
+
+/*******************
+ * TYPOGRAPHY
+*******************/
+h1,h2,h3,h4,h5,h6 {
+	font-family: $font-family-title;
+	text-transform: uppercase;
+	line-height: 1em;
+	clear: both;
+	letter-spacing: -.5px;
+	text-align: center;
+	font-weight: $font-weight-title;
+}
+h1 { 
+	letter-spacing: -1px;
+	font-weight: 900;
+}
+h2 {
+	
+}
+p {
+	margin-bottom: 1.5em;
+	font-size: 14px;
+	line-height: 1.6em;
+}

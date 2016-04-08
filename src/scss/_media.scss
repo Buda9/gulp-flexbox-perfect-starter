@@ -1,0 +1,19 @@
+/*******************
+ * IMAGES
+*******************/
+img {
+	height: auto; /* Make sure that the images are scaled correctly */
+	max-width: 100%; /* Container width */
+}
+
+/*******************
+ * ICONS
+ * http://fortawesome.github.io/Font-Awesome/icons/
+*******************/
+
+@import url('http://netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.css');
+
+.fa-check{
+	font-size: 25px;
+	padding-right: 10px;
+}

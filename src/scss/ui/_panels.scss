@@ -1,0 +1,25 @@
+/*******************
+ * PANELS
+*******************/
+
+.panel{
+	padding: 20px 40px;
+	margin: 20px;
+	background: $grey-light;
+}
+.panel.success, .panel.info, .panel.warning, .panel.danger{
+	color: $white;
+}
+
+.panel.success{
+    background: $success;
+}
+.panel.info{
+    background: $info;
+}
+.panel.warning{
+    background: $warning;
+}
+.panel.danger{
+    background: $danger;
+}
