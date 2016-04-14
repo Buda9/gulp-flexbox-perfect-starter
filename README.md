@@ -26,7 +26,7 @@ This will process any Sass (SCSS) files and launch a web browser showing the cur
 
 ## Questions
 
-Drop me a line at [davor@davor.pro](davor@davor.pro) with any questions or thoughts. Pull requests welcomed!
+Drop me a line at [davor@davor.pro](mailto:davor@davor.pro) with any questions or thoughts. Pull requests welcomed!
 
 ### License
 
