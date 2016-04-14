@@ -41,7 +41,6 @@ Integrate:
 - https://www.npmjs.com/package/gulp-rev
 - https://www.npmjs.com/package/psi
 - https://www.npmjs.com/package/gulp-iconfont
-- 
 
 ### Bugs
 
