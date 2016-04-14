@@ -29,7 +29,8 @@ var gulp         = require('gulp'),
     imagemin     = require('gulp-imagemin'),
     pngquant     = require('imagemin-pngquant'),
     size         = require('gulp-size'),
-    notify      = require('gulp-notify');
+    notify       = require('gulp-notify'),
+    critical 	   = require('critical').stream;
 
 
 /**
@@ -82,6 +83,17 @@ gulp.task('compileSass', function() {
     .pipe(size({ gzip: true, showFiles: true }))
     .pipe(gulp.dest('public/css'))
     .pipe(browserSync.reload({stream:true}));
+});
+
+/**
+*
+* Generate & Inline Critical-path CSS
+*
+**/
+gulp.task('critical', ['run'], function () {
+    return gulp.src('public/*.html')
+        .pipe(critical({base: './public', inline: true, css: ['public/css/style.css']}))
+        .pipe(gulp.dest('public/'));
 });
 
 /**

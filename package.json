@@ -1,6 +1,6 @@
 {
   "name": "gulp-starter-kit",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Gulp starter kit by @Buda9",
   "main": "gulpfile.js",
   "author": "Davor Budimir, davor.pro",
