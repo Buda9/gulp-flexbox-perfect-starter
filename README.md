@@ -31,3 +31,18 @@ Drop me a line at [davor@davor.pro](mailto:davor@davor.pro) with any questions o
 ### License
 
 MIT
+
+### TO-DO
+
+Integrate: 
+
+- https://www.npmjs.com/package/gulp-changed
+- https://www.npmjs.com/package/gulp-newer
+- https://www.npmjs.com/package/gulp-rev
+- https://www.npmjs.com/package/psi
+- https://www.npmjs.com/package/gulp-iconfont
+- 
+
+### Bugs
+
+None
