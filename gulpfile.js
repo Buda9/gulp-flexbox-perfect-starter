@@ -1,210 +1,200 @@
+/*=============================================
+=            Gulp Starter by @Buda9           =
+=============================================*/
+
 'use strict';
 
-var     gulp = require('gulp'),
-      uglify = require('gulp-uglify'),
-      concat = require('gulp-concat'),
-      rename = require('gulp-rename'),
-        sass = require('gulp-sass'),
-  minifyHTML = require('gulp-minify-html'),
-minifyInline = require('gulp-minify-inline'),
-  sourcemaps = require('gulp-sourcemaps'),
-autoprefixer = require('gulp-autoprefixer'),
-	  eslint = require('gulp-eslint'),
-      useref = require('gulp-useref'),
-         iff = require('gulp-if'),
-        csso = require('gulp-csso'),
-         del = require('del'),
-	 jasmine = require('gulp-jasmine-phantom'),
-	imagemin = require('gulp-imagemin'),
-	pngquant = require('imagemin-pngquant'),
-	   gutil = require('gulp-util');
+/**
+*
+* The packages we are using
+*
+**/
+var gulp         = require('gulp'),
+    sass         = require('gulp-sass'),
+    minifyHTML   = require('gulp-minify-html'),
+    minifyInline = require('gulp-minify-inline'),
+    autoprefixer = require('gulp-autoprefixer'),
+    minifycss    = require('gulp-minify-css'),
+    uglify       = require('gulp-uglify'),
+    sourcemaps   = require('gulp-sourcemaps'),
+    rename       = require('gulp-rename'),
+    del          = require('del'),
+    browserSync  = require('browser-sync'),
+    reload       = browserSync.reload,
+    concat       = require('gulp-concat'),
+    eslint       = require('gulp-eslint'),
+    plumber      = require('gulp-plumber'),
+    cssshrink    = require('gulp-cssshrink'),
+    changed      = require('gulp-changed'),
+    imagemin     = require('gulp-imagemin'),
+    pngquant     = require('imagemin-pngquant'),
+    size         = require('gulp-size'),
+    notify      = require('gulp-notify');
 
-var paths = {
-  src: './src',
-  public: './public'
-};
 
-var browserSync = require('browser-sync').create();
-var reload      = browserSync.reload;
-
-
-// ***************************************
-// Browser-Sync Tasks
-// ***************************************
-gulp.task('run', ['serve'], function(){
-	browserSync.init({
-		server: 'public/'
-	});
-	browserSync.stream();
+/**
+*
+* A pluggable and configurable linter tool for identifying and reporting on patterns in JavaScript. Maintain your code quality with ease.
+* - Manually enter gulp lint to call eslint
+*
+**/
+gulp.task('jslint', function(){
+  return gulp.src('src/js/*.js').pipe(eslint()).pipe(eslint.format());
 });
 
 
-// ***************************************
-// Lint / TBD
-// ***************************************
-gulp.task('lint', function(){
-	return gulp.src(paths.src + '/js/*.js').pipe(eslint()).pipe(eslint.format());
-});
-
-
-// ***************************************
-// Tests / TBD
-// ***************************************
-gulp.task('tests', function(){
-	gulp.src(paths.src + '/js/*.js')
-		.pipe(jasmine({
-			integration: true,
-			vendor: 'js/**/*.js'
-		})).on('error', gutil.log.bind(gutil, gutil.colors.red(
-         '\n\n*********************************** \n' +
-        'JS ERROR:' +
-        '\n*********************************** \n\n'
-        )));
-});
-
-
-// ***************************************
-// Merge all scripts into one script
-// ***************************************
-gulp.task('concatScripts', function() {
-	return gulp.src(paths.src + '/js/*.js')
-	// Initialize source maps for Javascript
-	.pipe(sourcemaps.init())
-	// Name and location of the compiled file
-	.pipe(concat('app.js'))
-	// Path for maps. This in brackets (./) means it will stay in same location
-	// If you wish to add maps in one directory up we can use this: '../maps'
-	.pipe(sourcemaps.write('./maps'))
-	.pipe(gulp.dest('public/js'))
-});
-
-
-// ***************************************
-// Here we're using gulp uglify to minify script + gulp rename which is used to rename the file
-// ***************************************
-gulp.task('minifyScripts', ['concatScripts'], function(){
-  return gulp.src(paths.src + '/js/*.js')
-    .pipe(uglify().on('error', gutil.log.bind(gutil, gutil.colors.red(
-         '\n\n*********************************** \n' +
-        'JS ERROR:' +
-        '\n*********************************** \n\n'
-        ))))
-    .pipe(rename({
-      suffix: '.min'
-    }))
-    .pipe(gulp.dest('./public/js'));
-});
-
-
-// ***************************************
-// Gulp Sass package + gulp autoprefixer package + gulp Sass sourcemaps package
-// ***************************************
+/**
+*
+* Compile Sass to CSS
+* - Compile
+* - Compress/Minify
+* - Autoprefixer
+* - Sourcemaps
+*
+**/
 gulp.task('compileSass', function() {
-  return gulp.src(paths.src + "/scss/style.scss")
-		// Initialize css.map
-		.pipe(sourcemaps.init())
-		// Initialize Sass
-		.pipe(sass({outputStyle: 'compressed'}).on('error', gutil.log.bind(gutil, gutil.colors.red(
-         '\n\n*********************************** \n' +
-        'SASS ERROR:' +
-        '\n*********************************** \n\n'
-        ))))
-		// Initialize autoprefixer
-		.pipe(autoprefixer({
-			browsers: ['last 4 versions']
-		}))
-		// When this-> ('./') is used it means that we want to insert css.map in the same folder as compiled CSS
-		.pipe(sourcemaps.write('./maps'))
-		// Directory of compiled Sass
-		.pipe(gulp.dest(paths.public + '/../public/css'))
-		.pipe(browserSync.reload({stream:true}));
+  var onError = function(err) {
+      notify.onError({
+          title:    "Gulp",
+          subtitle: "Failure!",
+          message:  "Error: <%= error.message %>",
+          sound:    "Beep"
+      })(err);
+      this.emit('end');
+  };
+
+  return gulp.src('./src/sass/style.scss')
+    // Initialize css.map
+    .pipe(sourcemaps.init())
+    .pipe(plumber({errorHandler: onError}))
+    .pipe(sass())
+    .pipe(size({ gzip: true, showFiles: true }))
+    // Initialize autoprefixer
+    .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
+    // Directory of compiled Sass
+    .pipe(gulp.dest('public/css'))
+    .pipe(rename({suffix: '.min'}))
+    // Minify compiled CSS
+    .pipe(minifycss({ processImport: false }))
+    .pipe(cssshrink())
+    // Use this-> ('./') if you want to add css.map in the same folder as compiled CSS, otherwise write folder name
+    .pipe(sourcemaps.write('./maps'))
+    .pipe(size({ gzip: true, showFiles: true }))
+    .pipe(gulp.dest('public/css'))
+    .pipe(browserSync.reload({stream:true}));
 });
 
+/**
+*
+* Minify and concat scripts
+* - Sourcemaps
+* - Concat
+* - Uglify
+*
+**/
+gulp.task('minifyConcatScripts', function() {
+  return gulp.src(['./src/javascripts/**'])
+    // Initialize source maps for Javascript
+    .pipe(sourcemaps.init())
+    .pipe(plumber())
+    // Name and location of the compiled file
+    .pipe(concat('app.js'))
+    .pipe(gulp.dest('public/js'))
+    .pipe(rename({suffix: '.min'}))
+    .pipe(uglify())
+    .pipe(size({ gzip: true, showFiles: true }))
+    // Path for maps. This in brackets (./) means it will stay in same location
+    // If you wish to add maps in one directory up we can use this: '../maps'
+    .pipe(sourcemaps.write('./maps'))
+    .pipe(gulp.dest('public/js'))
+    .pipe(browserSync.reload({stream:true}));
+});
 
-// ***************************************
-// Minify and inline HTML compiled file
-// ***************************************
+/**
+*
+* Images
+* - Compress them!
+*
+**/
+gulp.task('imgOptimize', function () {
+  return gulp.src('src/images/**')
+    .pipe(changed('public/images'))
+    .pipe(imagemin({
+      // Lossless conversion to progressive JPGs
+      progressive: true,
+      // Interlace GIFs for progressive rendering
+      interlaced: true,
+      svgoPlugins: [{removeViewBox: false}],
+      use: [pngquant()]
+    }))
+    .pipe(gulp.dest('public/images'))
+    .pipe(size({title: 'imgOptimize'}));
+});
+
+/**
+*
+* Compress and minify HTML
+* - Shrink HTML file size!
+*
+**/
 gulp.task('compressHtml', function() {
-	return gulp.src(paths.src + '/*.html')
-	.pipe(minifyInline())
-	.pipe(minifyHTML())
-	.pipe(gulp.dest('public/'))
-	.pipe(reload({stream:true}));
+  return gulp.src('./src/*.html')
+    .pipe(minifyInline())
+    .pipe(minifyHTML())
+    .pipe(gulp.dest('public/'));
 });
 
-
-// ***************************************
-// Watch method for live coding and live compiling of Scss and Javascript
-// ***************************************
-gulp.task('watchFiles', function(){
-	gulp.watch(paths.src + '/scss/*.scss', ['compileSass']);
-	gulp.watch(paths.src + '/js/**', ['concatScripts']);
-	gulp.watch(paths.src + '/*.html', ['compressHtml']);
-	gulp.watch(paths.src + '/js/**', ['eslint']);
-})
-
-
-// ***************************************
-// command $ gulp imgOptimize
-// Lossless image optimizer
-// ***************************************
-gulp.task('imgOptimize', function(){
-	return gulp.src(paths.src + '/img/*')
-		.pipe(imagemin({
-			progressive: true,
-			svgoPlugins: [{removeViewBox: false}],
-			use: [pngquant()]
-		}))
-		.pipe(gulp.dest('public/img'));
+/**
+*
+* BrowserSync.io
+* - Watch CSS, JS & HTML for changes
+* - View project at: localhost:3000
+* - Serving content from /public/ folder
+*
+**/
+gulp.task('run', ['compileSass', 'minifyConcatScripts'], function() {
+  browserSync({
+    server: {
+      baseDir: "./public/",
+      injectChanges: true
+    }
+  });
 });
 
-
-// ***************************************
-// command $ gulp clean
-// Use if you wish to manually remove compiled files and folders
-// ***************************************
+/**
+*
+* Use gulp clean if you want to manually remove compiled files and folders
+*
+**/
 gulp.task('clean', function() {
-  del(['public/css','public/js']);
+  del(['public']);
 });
 
-
-// ***************************************
-// command $ gulp serve
-// When this command is used it will automatically compile Scss and Javascript files
-// ***************************************
-gulp.task('serve', ['watchFiles']);
-
-
-// ***************************************
-// command $ gulp build
-// This build task will compile all files into new /public folder. {base: means that the files will keep their starting directory, e.g. styles/main.css will be in styles folder}
-// ***************************************
-gulp.task("build", ['html'], function() {
-	return gulp.src([paths.src + '/css/*.css', paths.src + '/js/*.js', paths.src + '/*.html', paths.src + "/img/**", paths.src + "/fonts/**"], { base: paths.src})
-			   .pipe(gulp.dest(paths.public));
+/**
+*
+* Watch for file changes for html, images, scripts and sass/css
+*
+**/
+gulp.task('watch', function() {
+  // Watch .html files
+  gulp.watch('src/**/*.html', ['compressHtml', browserSync.reload]);
+  gulp.watch("public/*.html").on('change', browserSync.reload);
+  // Watch .sass files
+  gulp.watch('src/sass/**/*.scss', ['compileSass', browserSync.reload]);
+  // Watch .js files
+  gulp.watch('src/js/*.js', ['minifyConcatScripts', 'jslint', browserSync.reload]);
+  // Watch image files
+  gulp.watch('src/images/**/*', ['imgOptimize', browserSync.reload]);
 });
 
-
-// ***************************************
-// command $ gulp html
-// Gulp-useref concatenates any number of CSS and JavaScript files into a single file by looking for a comment that starts with "<!--build:" and ends with "<!--endbuild-->", located in HTML file
-// ***************************************
-gulp.task('html', ['compileSass', 'minifyScripts', 'compressHtml'], function() {
-	gulp.src(paths.src + '/index.html')
-		.pipe(iff(paths.src + '/js/*.js', uglify()))
-		// gulp-csso is being used for CSS optimization
-		.pipe(iff(paths.src + '/css/*.css', csso()))
-		.pipe(useref())
-		.pipe(gulp.dest(paths.public));
+/**
+*
+* Default task
+* - Clean previous build and create new on every gulp call
+* - Runs compileSass, browserSync, minifyConcatScripts and imgOptimize tasks
+* - Watchs for file changes for images, scripts and sass/css
+*
+**/
+gulp.task('default', function() {
+    gulp.start('clean', 'compileSass', 'minifyConcatScripts', 'imgOptimize', 'compressHtml', 'jslint', 'run', 'watch');
 });
-
-
-// ***************************************
-// command $ gulp
-// It will call clean task that will remove previously compiled files before creating new ones
-// ***************************************
-gulp.task('default', ['clean', 'imgOptimize'], function(){
-	// Warning! gulp.start will be replace with gulp.series in gulp v4
-	gulp.start('build');
-	gulp.start('run');
-})

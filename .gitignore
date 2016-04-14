@@ -27,6 +27,4 @@ src../
 
 # Compiled Files #
 ######################
-public/css/
-public/maps/
-public/js/
+public/

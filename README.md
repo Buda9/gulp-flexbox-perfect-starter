@@ -1,44 +1,33 @@
-#Getting Started
-___
-###Install Gulp
-	npm install -g gulp
+# Starter kit for HTML/CSS/JS projects
 
-###Install Bower
-	npm install -g bower
+This starter kit includes Gulp to compile Sass into CSS, along with autoprefixer, source maps and Browser Sync.
 
-###Install Node Modules
-	npm install
+## Setup
 
-###Install Bower Packages
-	bower install
+Before starting, you'll need [Node](https://nodejs.org/) (which includes NPM).
 
-#Tasks
-___
+If using OSX, I'd recommend this guide to [getting set up with Node and NPM](http://www.johnpapa.net/how-to-use-npm-global-without-sudo-on-osx/).
 
-###It will call clean task that will remove previously compiled files before creating new ones
+Then install Gulp using `npm install -g gulp`. This installs Gulp globally and is needed later.
+
+Clone this repo to your local computer using this command:
+
+    git clone https://git@github.com/Buda9/gulp-flex-webapp-boilerplate.git starter
+
+With the files downloaded, navigate to your `starter` folder on the command line (or Terminal) and run `npm install` to set things up.
+
+If that doesn't work, it may be necessary to use `sudo npm install`.
+
+With this set up, you should now be able to run:
 
     gulp
 
-###Gulp-useref concatenates any number of CSS and JavaScript files into a single file by looking for a comment that starts with "<!--build:" and ends with "<!--endbuild-->", located in HTML file
+This will process any Sass (SCSS) files and launch a web browser showing the current files. Making changes to the files should result in the page updating automatically.
 
-    gulp html
+## Questions
 
-###This build task will compile all files into new /public folder. {base: means that the files will keep their starting directory, e.g. styles/main.css will be in styles folder}
+Drop me a line at [davor@davor.pro](davor@davor.pro) with any questions or thoughts. Pull requests welcomed!
 
-    gulp build
+### License
 
-###When this command is used it will automatically compile Scss and Javascript files
-
-    gulp serve
-
-###Use if you wish to manually remove compiled files and folders
-
-    gulp clean
-
-###Lossless image optimizer
-
-    gulp imgOptimize
-
-###Browser-Sync Tasks
-
-    gulp run
+MIT
