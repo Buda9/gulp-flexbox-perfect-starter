@@ -1,6 +1,6 @@
 # Starter kit for HTML/CSS/JS projects
 
-This starter kit includes Gulp to compile Sass into CSS, along with autoprefixer, source maps and Browser Sync.
+This starter kit includes Gulp to compile Sass into CSS, along with Flexbox, Minify and Inline HTML, Sourcemaps, ESLint, Image Compressor and BrowserSync.
 
 ## Setup
 
