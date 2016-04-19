@@ -1,17 +1,17 @@
 {
-  "name": "gulp-starter-kit",
-  "version": "0.3.0",
+  "name": "gulp-flexbox-perfect-starter",
+  "version": "0.3.1",
   "description": "Gulp starter kit by @Buda9",
   "main": "gulpfile.js",
   "author": "Davor Budimir, davor.pro",
   "license": "MIT",
-  "homepage": "https://github.com/Buda9/gulp-starter-kit#readme",
+  "homepage": "https://github.com/Buda9/gulp-flexbox-perfect-starter#readme",
   "repository": {
     "type": "git",
-    "url": "git://github.com/Buda9/gulp-starter-kit.git"
+    "url": "git://github.com/Buda9/gulp-flexbox-perfect-starter.git"
   },
   "bugs": {
-    "url": "https://github.com/Buda9/gulp-starter-kit/issues"
+    "url": "https://github.com/Buda9/gulp-flexbox-perfect-starter/issues"
   },
   "devDependencies": {
     "browser-sync": "^2.7.5",
