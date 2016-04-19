@@ -162,5 +162,5 @@ Integrate:
 [npm-url]: https://www.npmjs.com/package/gulp
 [npm-image]: https://img.shields.io/npm/v/gulp.svg
 
-[travis-url]: https://travis-ci.org/gulpjs/gulp
+[travis-url]: https://travis-ci.org/Buda9/gulp-flexbox-perfect-starter
 [travis-image]: https://img.shields.io/travis/gulpjs/gulp.svg
