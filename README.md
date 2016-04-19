@@ -1,6 +1,6 @@
 # ![Gulp Starter](gulp-intro.jpg)
 
-[![Build Status](https://travis-ci.org/vigetlabs/gulp-starter.svg?branch=static-server)](https://travis-ci.org/Buda9/gulp-flexbox-perfect-starter)
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
 
 Gulp Flexbox Perfect Starter is a delicious blend of tasks and build tools poured into [Gulp](http://gulpjs.com/) to form a full-featured modern asset pipeline. It can be used as-is as a static site builder, or can be configured and integrated into your own development environment and site or app structure. [Check out the compiled demo]() and play with [the source files](/src)!
 
@@ -158,3 +158,9 @@ Integrate:
 
 
 ***
+
+[npm-url]: https://www.npmjs.com/package/gulp
+[npm-image]: https://img.shields.io/npm/v/gulp.svg
+
+[travis-url]: https://travis-ci.org/gulpjs/gulp
+[travis-image]: https://img.shields.io/travis/gulpjs/gulp.svg
