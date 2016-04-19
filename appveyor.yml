@@ -1,0 +1,32 @@
+# AppVeyor file
+# http://www.appveyor.com/docs/appveyor-yml
+# This file: cloned from https://github.com/gruntjs/grunt/blob/master/appveyor.yml
+
+# Fix line endings on Windows
+init:
+  - git config --global core.autocrlf true
+
+# What combinations to test
+environment:
+  matrix:
+    - nodejs_version: "5.6"
+
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - npm install -g npm
+  - npm install
+  - npm install critical
+
+test_script:
+  # Output useful info for debugging.
+  - node --version && npm --version
+  - cmd: gulp
+
+build: off
+deploy: off
+
+matrix:
+  fast_finish: true
+
+cache:
+  - node_modules -> package.json                                        # local npm modules

@@ -3,8 +3,7 @@ install:
 language: node_js
 env: TRAVIS_CI=true
 node_js:
-  - "5.6"
-  - "4.3"
+  - "5.10.1"
 before_script:
   - npm install critical
   - npm install -g gulp
