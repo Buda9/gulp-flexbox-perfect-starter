@@ -23,6 +23,7 @@ var gulp         = require('gulp'),
     reload       = browserSync.reload,
     concat       = require('gulp-concat'),
     eslint       = require('gulp-eslint'),
+    useref       = require('gulp-useref'),
     plumber      = require('gulp-plumber'),
     cssshrink    = require('gulp-cssshrink'),
     changed      = require('gulp-changed'),
@@ -30,7 +31,7 @@ var gulp         = require('gulp'),
     pngquant     = require('imagemin-pngquant'),
     size         = require('gulp-size'),
     notify       = require('gulp-notify'),
-    critical 	   = require('critical').stream;
+    critical     = require('critical').stream;
 
 
 /**
@@ -151,6 +152,7 @@ gulp.task('imgOptimize', function () {
 **/
 gulp.task('compressHtml', function() {
   return gulp.src('./src/*.html')
+    .pipe(useref())
     .pipe(minifyInline())
     .pipe(minifyHTML())
     .pipe(gulp.dest('public/'));
