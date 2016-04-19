@@ -1,0 +1,11 @@
+install:
+  - npm install
+language: node_js
+env: TRAVIS_CI=true
+node_js:
+  - "5.6"
+  - "4.3"
+before_script:
+  - npm install -g gulp
+script:
+  - gulp
